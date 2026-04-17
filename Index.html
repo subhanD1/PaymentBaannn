@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAYMENT BAAN</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #0d0808 0%, #1a0505 50%, #0d0808 100%);
+      min-height: 100vh;
+      color: #ffffff;
+    }
+
+    .page {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .page.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Logo Styles */
+    .logo-container {
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ff4500;
+      box-shadow: 0 0 30px rgba(255, 69, 0, 0.6), 0 0 60px rgba(255, 69, 0, 0.3);
+    }
+
+    .logo-small {
+      width: 80px;
+      height: 80px;
+    }
+
+    /* Title Styles */
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .title-with-cursor {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 28px;
+      background-color: #ffffff;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* Typewriter Effect */
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      animation: typing 2s steps(12) forwards;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 12px 48px;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-pink {
+      background-color: #ffb6c1;
+      color: #8b0000;
+    }
+
+    .btn-pink:hover {
+      background-color: #ffc0cb;
+      transform: scale(1.05);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: #ff6b35;
+      border: 2px solid #ff4500;
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(255, 69, 0, 0.1);
+    }
+
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+    }
+
+    /* QRIS Section */
+    .qris-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .qris-frame {
+      border: 3px solid #ff4500;
+      border-radius: 12px;
+      padding: 8px;
+      background-color: #ffffff;
+    }
+
+    .qris-image {
+      width: 220px;
+      height: auto;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .hint-text {
+      font-size: 14px;
+      color: #a0a0a0;
+      text-align: center;
+    }
+
+    /* Dana Section */
+    .dana-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .dana-box {
+      border: 2px solid #ff4500;
+      border-radius: 8px;
+      padding: 12px 24px;
+      background-color: transparent;
+    }
+
+    .dana-label {
+      font-size: 14px;
+      color: #a0a0a0;
+      margin-bottom: 4px;
+    }
+
+    .dana-number {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffffff;
+      font-family: monospace;
+    }
+
+    .btn-copy {
+      background-color: #ff6b35;
+      color: #ffffff;
+      padding: 10px 32px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-copy:hover {
+      background-color: #ff7f50;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      transition: bottom 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      bottom: 24px;
+    }
+
+    .toast-message {
+      color: #22c55e;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .toast-btn {
+      background-color: #333;
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .toast-btn:hover {
+      background-color: #444;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .title {
+        font-size: 24px;
+      }
+      
+      .qris-image {
+        width: 180px;
+      }
+      
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Page 1: Home -->
+  <div id="page-home" class="page active">
+    <div class="logo-container">
+      <img src="https://files.catbox.moe/303pg7.png" alt="Logo" class="logo">
+    </div>
+    <h1 class="title">
+      <span class="typewriter">Paymet BAAN</span>
+    </h1>
+    <button class="btn btn-pink" onclick="showPage('payment')">PAYMENT</button>
+  </div>
+
+  <!-- Page 2: Payment -->
+  <div id="page-payment" class="page">
+    <div class="logo-container">
+      <img src="https://files.catbox.moe/x6ifva.png" alt="Logo" class="logo logo-small">
+    </div>
+    <h1 class="title">
+      <span class="title-with-cursor">
+        PAYMENT BAAN
+        <span class="cursor"></span>
+      </span>
+    </h1>
+    <div class="btn-group">
+      <button class="btn btn-pink" onclick="showPage('all-payment')">ALL PAYMENT</button>
+      <button class="btn btn-outline" onclick="showPage('home')">BACK</button>
+    </div>
+  </div>
+
+  <!-- Page 3: All Payment -->
+  <div id="page-all-payment" class="page">
+    <div class="logo-container">
+      <img src="https://files.catbox.moe/x6ifva.png" alt="Logo" class="logo logo-small">
+    </div>
+    <h1 class="title">PAYMENT BAAN</h1>
+    <button class="btn btn-pink" style="margin-bottom: 24px;">ALL PAYMENT</button>
+    
+    <div class="qris-section">
+      <div class="qris-frame">
+        <img src="https://files.catbox.moe/9l82j3.jpeg" alt="QRIS" class="qris-image">
+      </div>
+      <p class="hint-text">Tekan lama gambar jika ingin simpan ke galeri kalau udah ss bukti</p>
+    </div>
+
+    <div class="dana-section">
+      <div class="dana-box">
+        <p class="dana-label">Nomor DANA:</p>
+        <p class="dana-number">083845320248</p>
+      </div>
+      <button class="btn-copy" onclick="copyNumber()">Salin Nomor</button>
+    </div>
+
+    <button class="btn btn-outline" onclick="showPage('payment')">BACK</button>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <span class="toast-message">Nomor DANA disalin</span>
+    <button class="toast-btn" onclick="hideToast()">OKE</button>
+  </div>
+
+  <script>
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      
+      // Show selected page
+      document.getElementById('page-' + pageId).classList.add('active');
+    }
+
+    function copyNumber() {
+      const number = '085766733208';
+      navigator.clipboard.writeText(number).then(() => {
+        showToast();
+      }).catch(err => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = number;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showToast();
+      });
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+    }
+
+    function hideToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.remove('show');
+    }
+  </script>
+</body>
+</html>
